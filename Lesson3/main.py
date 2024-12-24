@@ -3,27 +3,32 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Messa
 
 
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(f'Hello {update.effective_user.first_name}')
+    id = update.effective_user.id
+    name = update.effective_user.full_name
+    username = update.effective_user.username
     
-
-async def xabarlar(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    message = update.message.text
-    try:
-        if int(message) % 2 == 0:
-            await update.message.reply_text("Bu son juft")
-        else:
-            await update.message.reply_text("Bu son toq")
-    except Exception as error:
-        await update.message.reply_text("Faqat son kiriting!")
-        print(error)
-    else:
-        print("Ishladi...")
+    await update.message.reply_text(f"🥷 Yangi foydalanuvchi: \n🆔 ID: {id}\n🚹 Name: {name}\n📱 Username: @{username}")
     
+    
+async def send_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_sticker("https://telegrambots.github.io/book/docs/sticker-fred.webp")
+    
+    
+    
+async def send_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_video("video.mp4")
+    
+    
+async def send_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_photo("abduvali.jpg")
 
 
 app = ApplicationBuilder().token("7716195960:AAF7Psfoj_xdXNfockgHKEDAex7F-hLIiKk").build()
 
 app.add_handler(CommandHandler("start", hello))
-app.add_handler(MessageHandler(filters.TEXT, xabarlar))
+app.add_handler(CommandHandler("sticker", send_sticker))
+app.add_handler(CommandHandler("photo", send_photo))
+app.add_handler(CommandHandler("video", send_video))
+
 
 app.run_polling()
